@@ -1,7 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
-    InsuranceCompanyViewSet,
     ContactDetailsViewSet,
     PatientViewSet,
     NextOfKinViewSet,
@@ -16,13 +15,14 @@ from .views import (
     ConvertToAppointmentAPIView,
     SendAppointmentConfirmationAPIView,
     AppointmentsByPatientIdAPIView,
-    PrescribedDrugByPatinetIdAPIView,
+    PrescribedDrugByPatientIdAPIView,
     PrescribedDrugByPrescriptionViewSet,
-    download_prescription_pdf
+    download_prescription_pdf,
+    AttendanceProcessViewSet,
+    AppointmentByDoctorView
 )
 
 router = DefaultRouter()
-router.register(r'insurance-companies', InsuranceCompanyViewSet)
 router.register(r'contact-details', ContactDetailsViewSet)
 router.register(r'patients', PatientViewSet)
 router.register(r'next-of-kin', NextOfKinViewSet)
@@ -35,6 +35,7 @@ router.register(r'referrals', ReferralViewSet)
 router.register(r'triage', TriageViewSet)
 router.register(r'appointments', AppointmentViewSet)
 router.register(r'appointments', AppointmentViewSet, basename='appointments')
+router.register(r'initiate-attendance-process', AttendanceProcessViewSet)
 
 
 
@@ -43,7 +44,9 @@ urlpatterns = [
     path('patients/<int:user_id>/', PatientByUserIdAPIView.as_view(), name="patient-by-userid"),
     
     path('appointments/by_patient_id/<int:patient_id>/', AppointmentsByPatientIdAPIView.as_view(), name="appointment-by-patientid"),
-    path('prescribed-drugs/by_patient_id/<int:patient_id>/', PrescribedDrugByPatinetIdAPIView.as_view(), name="prescribed-drug-by-patientid"),
+    path('appointments/by_doctor/<int:assigned_doctor_id>/', AppointmentByDoctorView.as_view(), name='appointments-by-doctor'),
+
+    path('prescribed-drugs/by_patient_id/<int:patient_id>/', PrescribedDrugByPatientIdAPIView.as_view(), name="prescribed-drug-by-patientid"),
 
     path('convert-to-appointment/', ConvertToAppointmentAPIView.as_view(), name="convert-to-appointment"),
     path('send-appointment-confirmation/', SendAppointmentConfirmationAPIView.as_view(), name="send-appointment-confirmation"),
